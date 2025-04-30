@@ -61,3 +61,10 @@ test('Appropiate error alert while sending email when backend fails', async ({pa
         expect(dialog.message()).toContain('There was an issue sending your Message')
     })
 })
+
+// Test 5
+test('Closes the compose email form when the close button is clicked and renders compose button', async ({page}) => {
+    await page.locator('button.btn-close').click()
+    await expect(page.getByTestId('compose-component')).not.toBeVisible()
+    await expect(page.getByRole('button', {name: '📧'})).toBeVisible()
+})

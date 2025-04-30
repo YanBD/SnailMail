@@ -1,7 +1,10 @@
-import { useState } from "react"
+
 import { Inbox } from "./Inbox"
 import { Home } from "./home"
 import { Compose } from "./compose"
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom"
+import ErrorPage from "./ErrorPage"
+import { useState } from "react"
 
 
 const SideBar = () => {
@@ -13,7 +16,10 @@ const SideBar = () => {
       setReplyMail(null)
     })
 
-    const sendReply = (mail: any) => {
+    //Functionality to send a reply email from the inbox
+    // This function is passed as a prop to the Inbox component
+    // and is called when the user clicks the reply button on an email
+    const sendReply = (mail: any) => { 
         setReplyMail ({ 
             sender: mail.recipient,
             recipient: mail.sender,
@@ -22,9 +28,9 @@ const SideBar = () => {
         })
         setShowCompose(true)
     }
-    
-  
-    const [activeComponent, setActiveComponent] = useState('home')
+
+    /* commented out code for routing without react-router
+        const [activeComponent, setActiveComponent] = useState('home')
 
     const renderComponent = () => {
         switch (activeComponent) {
@@ -34,18 +40,26 @@ const SideBar = () => {
                 return <Home/>
         }
     }
+    */
 
     return (
         <div className="d-flex">
-            <div className="position-fixed start-0 top-0 bg-t" style={{ width: '10%', borderRight: '1px solid #ccc', marginTop: '60px' }}>
-                    <div><button className="btn border-bottom" onClick={() => setActiveComponent('home')}>Home</button></div>
-                    <div><button className="btn border-bottom" onClick={() => setActiveComponent('inbox')}>Inbox</button></div>
+            <BrowserRouter>
+                <div className="position-fixed start-0 top-0 bg-t" style={{ width: '10%', borderRight: '1px solid #ccc', marginTop: '60px' }}>
+                        <div><Link to="/" className="btn border-bottom">Home</Link></div>
+                        <div><Link to="/inbox" className="btn border-bottom">Inbox</Link></div>
+                        
+                        <Routes>
+                        <Route path="/" element={<Home/>}></Route>
+                        <Route path="inbox" element={<Inbox sendReply={sendReply}/>}></Route>
+                        <Route path="*" element={<ErrorPage/>}></Route>
+                        </Routes>
 
 
-            </div>
-            {renderComponent()}
-            {showCompose ? <Compose data-testid="compose-component" onClose={toggleShowCompose} {...replyMail}/> 
-            : <button className='position-absolute bottom-0 end-0 m-3 btn btn-lg btn-outline-primary fs-1 ' onClick={toggleShowCompose}>📧</button>}
+                </div>
+                {showCompose ? <Compose data-testid="compose-component" onClose={toggleShowCompose} {...replyMail}/> 
+                : <button className='position-absolute bottom-0 end-0 m-3 btn btn-lg btn-outline-primary fs-1 ' onClick={toggleShowCompose}>📧</button>}
+            </BrowserRouter>
         </div>
     )
 }

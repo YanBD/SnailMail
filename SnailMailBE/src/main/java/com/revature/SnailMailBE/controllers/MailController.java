@@ -16,7 +16,7 @@ public class MailController {
         List<Mail> inbox = List.of(
                 new Mail("snail@snailmail.com", "Hey", "me@snailmail.com", "I am a snail"),
                 new Mail("snail@snailmail.com", "Hey","me@snailmail.com" , "I have a shell"),
-                new Mail("slug@snailmail.com","Hey" , "yan@snailmail.com", "I am a slug"),
+                new Mail("slug@snailmail.com","Hey" , "me@snailmail.com", "I am a slug"),
                 new Mail("clam@snailmail.com","Hey" , "me@snailmail.com", "...")
         );
         return ResponseEntity.ok().body(inbox);
