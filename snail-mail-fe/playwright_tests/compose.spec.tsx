@@ -11,12 +11,12 @@ test('User can send an email via the compose component', async ({page}) => {
     await page.getByRole('textbox', {name: 'recipient'}).fill('yan@snailmail.com')
     await page.getByRole('textbox', {name: 'subject'}).fill('Hello')
     await page.getByRole('textbox', {name: 'body'}).fill('This is your Playwright test')
-    await page.getByRole('button', {name: 'Send'}).click()
     page.on('dialog', async (dialog) => {
         expect(dialog.message()).toBe('Sent mail to yan@snailmail.com')
         dialog.dismiss()
     })
-    const response = await page.waitForResponse('**/mail')
+    await page.getByRole('button', {name: 'Send'}).click()
+    const response = await page.waitForResponse('http://localhost:8080/mail')
     expect(response.status()).toBe(200)
     const jsonResponse = await response.json()
     expect(jsonResponse.recipient).toBe('yan@snailmail.com')
@@ -67,4 +67,14 @@ test('Closes the compose email form when the close button is clicked and renders
     await page.locator('button.btn-close').click()
     await expect(page.getByTestId('compose-component')).not.toBeVisible()
     await expect(page.getByRole('button', {name: '📧'})).toBeVisible()
+})
+
+//test 6
+test('logs correct data from the backend after sending an email', async ({page}) => {
+    await page.getByRole('textbox', {name: 'recipient'}).fill('yan@snailmail.com')
+    await page.getByRole('textbox', {name: 'subject'}).fill('Hello')
+    await page.getByRole('textbox', {name: 'body'}).fill('This is your Playwright test')
+    page.on('console', msg => {
+        expect(msg.text()).toContain("{sender: me@snailmail.com")
+    })
 })
