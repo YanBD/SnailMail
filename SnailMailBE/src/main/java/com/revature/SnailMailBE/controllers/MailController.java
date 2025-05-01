@@ -14,10 +14,10 @@ public class MailController {
     @GetMapping
     public ResponseEntity<List<Mail>> getInbox(){
         List<Mail> inbox = List.of(
-                new Mail("snail@snailmail.com", "Hey", "me@snailmail.com", "I am a snail"),
-                new Mail("snail@snailmail.com", "Hey","me@snailmail.com" , "I have a shell"),
-                new Mail("slug@snailmail.com","Hey" , "me@snailmail.com", "I am a slug"),
-                new Mail("clam@snailmail.com","Hey" , "me@snailmail.com", "...")
+                new Mail("snail@snailmail.com","me@snailmail.com" , "Hey", "I am a snail"),
+                new Mail("snail@snailmail.com","me@snailmail.com" ,"Hey" , "I have a shell"),
+                new Mail("slug@snailmail.com","me@snailmail.com" , "Hey", "I am a slug"),
+                new Mail("clam@snailmail.com","me@snailmail.com" , "Hey", "...")
         );
         return ResponseEntity.ok().body(inbox);
     }
@@ -27,7 +27,7 @@ public class MailController {
         if(mail.getRecipient() == null || mail.getRecipient().isBlank()){
             return ResponseEntity.badRequest().body(null);
         }
-        
+
         return ResponseEntity.ok().body(mail);
     }
 }

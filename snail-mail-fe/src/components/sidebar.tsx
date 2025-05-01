@@ -46,8 +46,8 @@ const SideBar = () => {
         <div className="d-flex">
             <BrowserRouter>
                 <div className="position-fixed start-0 top-0 bg-t" style={{ width: '10%', borderRight: '1px solid #ccc', marginTop: '60px' }}>
-                        <div><Link to="/" className="btn border-bottom">Home</Link></div>
-                        <div><Link to="/inbox" className="btn border-bottom">Inbox</Link></div>
+                        <div><Link to="/" aria-label="home" className="btn border-bottom">Home</Link></div>
+                        <div><Link to="/inbox" aria-label="inbox" className="btn border-bottom">Inbox</Link></div>
                         
                         <Routes>
                         <Route path="/" element={<Home/>}></Route>

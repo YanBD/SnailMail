@@ -84,7 +84,7 @@ export const Compose:React.FC<Props> = ({onClose, sender, recipient, subject, bo
         <div className="card shadow position-absolute bottom-0 end-0 m-5" style={{width:"500px"}} {...testID}>
 
             <h6 className="border-bottom position-absolute top-0 start-0 m-2">Compose Email</h6>
-            <button onClick={onClose} className="btn-close position-absolute top-0 end-0 m-1"></button>
+            <button onClick={onClose} aria-label="close" className="btn-close position-absolute top-0 end-0 m-1"></button>
             
             <div className="row mb-3">
                 <label htmlFor="senderForm" className="col-sm-2 col-form-label text-nowrap">From:</label>

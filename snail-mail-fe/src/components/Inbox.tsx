@@ -42,23 +42,23 @@ export const Inbox:React.FC<InboxProps> = ({sendReply}) => {
 
                 {inbox.length === 0 ? (<div className="alert alert-primary"> <p data-name="noMail" >No Mail! You're all caught up!</p></div>)
                 :(
-                    <Table hover bordered>
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Sender</th>
-                            <th>Message</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {inbox.map((mail)=>(
+                    <Table hover bordered data-name="inboxTable">
+                        <thead>
                             <tr>
-                                <td className="p-3">{mail.subject}</td>
-                                <td><button className="btn bg-transparent p-2" onClick={() => sendReply(mail)}>{mail.sender}</button></td>
-                                <td className="p-3">{mail.body}</td>
+                                <th>Subject</th>
+                                <th>Sender</th>
+                                <th>Message</th>
                             </tr>
-                        ))}
-                    </tbody>
+                        </thead>
+                        <tbody>
+                            {inbox.map((mail)=>(
+                                <tr>
+                                    <td className="p-3">{mail.subject}</td>
+                                    <td><button className="btn bg-transparent p-2" onClick={() => sendReply(mail)}>{mail.sender}</button></td>
+                                    <td className="p-3">{mail.body}</td>
+                                </tr>
+                            ))}
+                        </tbody>
                 </Table>  
                 )}       
 
