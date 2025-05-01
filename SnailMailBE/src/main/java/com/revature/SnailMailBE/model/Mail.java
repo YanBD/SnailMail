@@ -9,7 +9,7 @@ public class Mail {
 
     public Mail() {}
 
-    public Mail(String sender, String subject, String recipient, String body) {
+    public Mail(String sender, String recipient, String subject, String body) {
         this.sender = sender;
         this.recipient = recipient;
         this.subject = subject;

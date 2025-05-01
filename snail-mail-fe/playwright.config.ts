@@ -1,12 +1,12 @@
-import {defineConfig} from '@playwright/test'
+import {defineConfig, devices} from '@playwright/test'
 
 export default defineConfig({
 
   testDir: './playwright_tests',
   projects: [
     {name: 'Chromium', use: {browserName: 'chromium'}},
-    {name: 'WebKit', use: {browserName: 'webkit'}},
-    {name: 'Firefox', use: {browserName: 'firefox'}},
+    {name: 'Firefox', use: { ...devices['Desktop Firefox']}},
+    {name: 'WebKit', use: {...devices['Desktop Safari']}},    
   ],
 
   use: {

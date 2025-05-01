@@ -27,7 +27,7 @@ public class MailController {
         if(mail.getRecipient() == null || mail.getRecipient().isBlank()){
             return ResponseEntity.badRequest().body(null);
         }
-
+        
         return ResponseEntity.ok().body(mail);
     }
 }
