@@ -5,7 +5,7 @@ import {test, expect} from "@playwright/test";
 test.beforeEach(async ({page}) => {
     await page.goto('/')
     await page.getByRole('link', {name: 'inbox'}).click()
-    expect (page.getByTitle('Inbox - Snail Mail')).toBeTruthy()
+    page.removeAllListeners()
 })
 
 //Test 1
@@ -23,7 +23,7 @@ test('User can see the inbox table', async ({page}) => {
 //Test if the messge for an empty Inbox is visible when there are no emails
 test('Empty Inbox when there are no emails', async ({page}) => {
     //Intercept the GET request to the inbox and return an empty array
-    await page.route('**/mail', route => {
+    await page.route('http://localhost:8080/mail', route => {
         route.fulfill({
             status: 200,
             contentType: 'application/json',
@@ -40,7 +40,7 @@ test('Empty Inbox when there are no emails', async ({page}) => {
 //Test if alert pops up when the fetch inbox request fails
 test('Alert pops up when fetch inbox request fails', async ({page}) => {
     //Intercept the get request to the Inbox and return a 400 error
-    await page.route('**/mail', route => {
+    await page.route('http://localhost:8080/mail', route => {
         route.fulfill({
             status: 400,
             contentType: 'application/json',
@@ -52,6 +52,7 @@ test('Alert pops up when fetch inbox request fails', async ({page}) => {
     //Check if the alert pops up with the correct message
     page.on('dialog', async (dialog) => {
         expect (dialog.message()).toBe('Please try again later')
+        await dialog.accept()
     })
 })
 
@@ -67,7 +68,7 @@ test('User can reply to an email', async ({page}) => {
         expect (dialog.message()).toBe('Sent mail to slug@snailmail.com')
         dialog.dismiss()
     })    
-    const response = await page.waitForResponse('**/mail')
+    const response = await page.waitForResponse('http://localhost:8080/mail')
     expect (response.status()).toBe(200)
     const jsonResponse = await response.json()
     expect (jsonResponse.recipient).toBe('slug@snailmail.com')

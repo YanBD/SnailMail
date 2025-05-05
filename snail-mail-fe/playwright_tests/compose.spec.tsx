@@ -4,6 +4,7 @@ test.beforeEach(async ({page}) => {
     await page.goto('/')
     await page.getByRole('button', {name: '📧'}).click()
     await expect (page.getByTestId('compose-component')).toBeVisible()
+    page.removeAllListeners()
 })
 
 // Test 1
@@ -17,17 +18,6 @@ test('User can send an email via the compose component', async ({page}) => {
     })
     await page.getByRole('button', {name: 'Send'}).click()
     const response = await page.waitForResponse('http://localhost:8080/mail')
-    await page.route('**/mail', route => {
-        route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            recipient: 'yan@snailmail.com',
-            subject: 'Hello',
-            body: 'This is your Playwright test'
-          }),
-        });
-      });
     expect(response.status()).toBe(200)
     const jsonResponse = await response.json()
     expect(jsonResponse.recipient).toBe('yan@snailmail.com')
@@ -42,6 +32,7 @@ test('Shows alert when message has no subject', async ({page}) =>{
     await page.getByRole('button', {name: 'Send'}).click()
     page.on('dialog', async (dialog) => {
         expect(dialog.message()).toBe('Please fill in all fields')
+        await dialog.accept()
     })
 })
 
@@ -61,7 +52,7 @@ test('Backend rejects emails with missing recipient', async () => {
 
 // Test 4
 test('Appropiate error alert while sending email when backend fails', async ({page}) => {
-    await page.route('**/mail', async route => {
+    await page.route('http://localhost:8080/mail', async route => {
         route.abort()
     })
     await page.getByRole('textbox', {name: 'recipient'}).fill('yan@snailmail.com')
@@ -70,6 +61,7 @@ test('Appropiate error alert while sending email when backend fails', async ({pa
 
     page.on('dialog', async (dialog) => {
         expect(dialog.message()).toContain('There was an issue sending your Message')
+        await dialog.accept()
     })
 })
 

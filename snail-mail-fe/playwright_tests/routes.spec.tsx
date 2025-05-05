@@ -8,7 +8,7 @@ test('User routes to error page when using an invalid URL', async ({browser}) =>
     await expect(page.getByRole('heading', {name: '404 - Page Not Found'})).toBeVisible()
     await expect(page.getByRole('link',{name: 'Go back to Home'})).toBeVisible()
     await page.getByRole('link',{name: 'Go back to Home'}).click()
-    await expect(page.getByRole('heading', {name: 'Welcome to SnailMail'})).toBeVisible()
+    await expect(page.getByRole('heading', {name: 'welcomeHeading'})).toBeVisible()
     await expect(page.getByRole('button', {name: '📧'})).toBeVisible()
 })
 
@@ -17,7 +17,7 @@ test('User can route to the home page', async ({browser}) => {
     const browserContext = await browser.newContext()
     const page = await browserContext.newPage()
     await page.goto('http://LocalHost:5173/')
-    await expect(page.getByRole('heading', {name: 'Welcome to SnailMail'})).toBeVisible()
+    await expect(page.getByRole('heading', {name: 'welcomeHeading'})).toBeVisible()
     await expect(page.getByRole('button', {name: '📧'})).toBeVisible()
 })
 

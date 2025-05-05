@@ -4,7 +4,7 @@ export default defineConfig({
 
   testDir: './playwright_tests',
   projects: [
-    {name: 'Chromium', use: {browserName: 'chromium'}},
+    {name: 'Chromium', use: { ...devices['Desktop Chrome']}},
     {name: 'Firefox', use: { ...devices['Desktop Firefox']}},
     {name: 'WebKit', use: {...devices['Desktop Safari']}},    
   ],
