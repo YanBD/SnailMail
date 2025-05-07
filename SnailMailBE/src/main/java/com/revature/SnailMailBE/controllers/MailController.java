@@ -1,6 +1,8 @@
 package com.revature.SnailMailBE.controllers;
 
 import com.revature.SnailMailBE.model.Mail;
+import com.revature.SnailMailBE.services.MailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,23 +13,31 @@ import java.util.List;
 @CrossOrigin
 
 public class MailController {
+    private MailService mailService;
+
+    @Autowired
+    public MailController(MailService mailService){
+        this.mailService = mailService;
+    }
+
     @GetMapping
     public ResponseEntity<List<Mail>> getInbox(){
-        List<Mail> inbox = List.of(
-                new Mail("snail@snailmail.com","me@snailmail.com" , "Hey", "I am a snail"),
-                new Mail("snail@snailmail.com","me@snailmail.com" ,"Hey" , "I have a shell"),
-                new Mail("slug@snailmail.com","me@snailmail.com" , "Hey", "I am a slug"),
-                new Mail("clam@snailmail.com","me@snailmail.com" , "Hey", "...")
-        );
-        return ResponseEntity.ok().body(inbox);
+        List<Mail> inbox = mailService.getInbox();
+
+        if (inbox == null){
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok().body(inbox);
+        }
     }
 
     @PostMapping
     public ResponseEntity<Mail> sendMail(@RequestBody Mail mail) {
-        if(mail.getRecipient() == null || mail.getRecipient().isBlank()){
-            return ResponseEntity.badRequest().body(null);
-        }
+        return ResponseEntity.ok().body(mailService.sendMail(mail));
+    }
 
-        return ResponseEntity.ok().body(mail);
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Exception> handleException(Exception e) {
+        return ResponseEntity.badRequest().body(e);
     }
 }

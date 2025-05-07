@@ -50,6 +50,7 @@ export const Compose:React.FC<Props> = ({onClose, sender, recipient, subject, bo
     const sendEmail = async () => {
       
         //Error handling
+        /* commented out error handling in the frontend to handle it in the backend
         if (mailToSend.recipient.trim() === "" || mailToSend.subject.trim() === "" || mailToSend.body.trim() === "") {
             alert("Please fill in all fields")
             return
@@ -65,15 +66,19 @@ export const Compose:React.FC<Props> = ({onClose, sender, recipient, subject, bo
         if (mailToSend.subject.length > 20) {
             alert("Subject is too long")
             return
-        }
+        }*/
         try{
         const response = await axios.post("http://localhost:8080/mail", mailToSend)
         console.log(response.data)
         alert(`Sent mail to ${mailToSend.recipient}`)
      
         onClose()
-        } catch {
-            alert("There was an issue sending your Message")
+        } catch (e){
+            if (axios.isAxiosError(e) && e.response) {
+                alert(e.response.data.message);
+            } else {
+                alert("There was an unexpected issue sending your Message");
+            }
         }
 
     }

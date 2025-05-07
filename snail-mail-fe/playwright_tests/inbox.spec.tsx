@@ -6,6 +6,7 @@ test.beforeEach(async ({page}) => {
     await page.goto('/')
     await page.getByRole('link', {name: 'inbox'}).click()
     page.removeAllListeners()
+
 })
 
 //Test 1

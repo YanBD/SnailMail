@@ -25,16 +25,42 @@ describe("Compose Component Tests", () => {
         cy.get("[data-testid='compose-component']").should("not.exist")
     })
 
-    //test Project 3------------------
-    it("displays an error message if user tries to send an email missing fields", () => {
+    //test Project 3.a------------------
+    it("displays an error message if user tries to send an email missing recipient", () => {
         cy.get("button").contains("📧").click()
         cy.get("[data-testid='compose-component']").should("exist")
         cy.get("input[name='recipient']").type(" ")
-        cy.get("input[name='subject']").type(" ")
+        cy.get("input[name='subject']").type("Hey")
+        cy.get("textarea[name='body']").type("This is your Cypress test")
+        cy.get("button").contains("Send").click()
+        cy.on("window:alert", cy.stub().as("alert"))
+        cy.get("@alert").should("have.been.calledWith", "Recipient cannot be empty")
+        cy.get("[data-testid='compose-component']").should("exist")
+    })
+
+    //test Project 3.b------------------
+    it("displays an error message if user tries to send an email missing body", () => {
+        cy.get("button").contains("📧").click()
+        cy.get("[data-testid='compose-component']").should("exist")
+        cy.get("input[name='recipient']").type("yan@snailmail.com")
+        cy.get("input[name='subject']").type("Hey")
         cy.get("textarea[name='body']").type(" ")
         cy.get("button").contains("Send").click()
         cy.on("window:alert", cy.stub().as("alert"))
-        cy.get("@alert").should("have.been.calledWith", "Please fill in all fields")
+        cy.get("@alert").should("have.been.calledWith", "Body cannot be empty")
+        cy.get("[data-testid='compose-component']").should("exist")
+    })
+
+    //test Project 3.c------------------
+    it("displays an error message if user tries to send an email missing subject", () => {
+        cy.get("button").contains("📧").click()
+        cy.get("[data-testid='compose-component']").should("exist")
+        cy.get("input[name='recipient']").type("yan@snailmail.com")
+        cy.get("input[name='subject']").type(" ")
+        cy.get("textarea[name='body']").type("This is your Cypress test")
+        cy.get("button").contains("Send").click()
+        cy.on("window:alert", cy.stub().as("alert"))
+        cy.get("@alert").should("have.been.calledWith", "Subject cannot be empty")
         cy.get("[data-testid='compose-component']").should("exist")
     })
 
@@ -50,7 +76,7 @@ describe("Compose Component Tests", () => {
         cy.get("textarea[name='body']").type("This is your Cypress test")
         cy.get("button").contains("Send").click()
         cy.on("window:alert", cy.stub().as("alert"))
-        cy.get("@alert").should("have.been.calledWith", "There was an issue sending your Message")
+        cy.get("@alert").should("have.been.calledWith", "There was an unexpected issue sending your Message")
     })
 
     //test Project 5------------------
@@ -115,12 +141,12 @@ describe("Compose Component Tests", () => {
         cy.get("textarea[name='body']").type("This is your Cypress test")
         cy.get("button").contains("Send").click()
         cy.on("window:alert", cy.stub().as("alert"))
-        cy.get("@alert").should("have.been.calledWith", "Subject is too long")
+        cy.get("@alert").should("have.been.calledWith", "Subject may not exceed 20 characters")
         cy.get("[data-testid='compose-component']").should("exist")
     })
 
     //test extra 1------------------
-    it("displays an error message if the email is sent to the same sender and recipient", () => {
+    it("displays an error message if an email has the same sender and recipient", () => {
         cy.get("button").contains("📧").click()
         cy.get("[data-testid='compose-component']").should("exist")
         cy.get("input[name='recipient']").type("me@snailmail.com")

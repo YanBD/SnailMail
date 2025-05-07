@@ -1,4 +1,5 @@
 import {test, expect, request} from '@playwright/test';
+import { Test } from 'mocha';
 
 test.beforeEach(async ({page}) => {
     await page.goto('/')
@@ -25,18 +26,40 @@ test('User can send an email via the compose component', async ({page}) => {
     expect(jsonResponse.body).toBe('This is your Playwright test')
 })
 
-// Test 2
+// Test 2.a
 test('Shows alert when message has no subject', async ({page}) =>{
     await page.getByRole('textbox', {name: 'recipient'}).fill('yan@snailmail.com')
     await page.getByRole('textbox', {name: 'body'}).fill('This is your Playwright test')
     await page.getByRole('button', {name: 'Send'}).click()
     page.on('dialog', async (dialog) => {
-        expect(dialog.message()).toBe('Please fill in all fields')
+        expect(dialog.message()).toBe('Subject cannot be empty')
         await dialog.accept()
     })
 })
 
-// Test 3
+// Test 2.b
+test('Shows alert when message has no recipient', async ({page}) =>{
+    await page.getByRole('textbox', {name: 'subject'}).fill('test')
+    await page.getByRole('textbox', {name: 'body'}).fill('This is your Playwright test')
+    await page.getByRole('button', {name: 'Send'}).click()
+    page.on('dialog', async (dialog) => {
+        expect(dialog.message()).toBe('Recipient cannot be empty')
+        await dialog.accept()
+    })
+})
+
+// Test 2.c
+test('Shows alert when message has no body', async ({page}) =>{
+    await page.getByRole('textbox', {name: 'recipient'}).fill('yan@snailmail.com')
+    await page.getByRole('textbox', {name: 'subject'}).fill('test')
+    await page.getByRole('button', {name: 'Send'}).click()
+    page.on('dialog', async (dialog) => {
+        expect(dialog.message()).toBe('Body cannot be empty')
+        await dialog.accept()
+    })
+})
+
+// Test 3.a
 test('Backend rejects emails with missing recipient', async () => {
     const requestConntex = await request.newContext()
     const response = await requestConntex.post('http://localhost:8080/mail', {
@@ -47,7 +70,35 @@ test('Backend rejects emails with missing recipient', async () => {
     })
     expect(response.status()).toBe(400)
     const body = await response.text()
-    expect(body).toBe("")
+    expect(body).toContain('Recipient cannot be empty')
+})
+
+// Test 3.b
+test('Backend rejects emails with missing subject', async () => {
+    const requestConntex = await request.newContext()
+    const response = await requestConntex.post('http://localhost:8080/mail', {
+        data: {
+            recipient: 'yan@snailmail.com',
+            body: 'This is your Playwright test'
+        }
+    })
+    expect(response.status()).toBe(400)
+    const body = await response.text()
+    expect(body).toContain('Subject cannot be empty')
+})
+
+//Test 3.c
+test('Backend rejects emails with missing body', async () => {
+    const requestConntex = await request.newContext()
+    const response = await requestConntex.post('http://localhost:8080/mail', {
+        data: {
+            recipient: 'yan@snailmail.com',
+            subject: 'Hello'
+        }
+    })
+    expect(response.status()).toBe(400)
+    const body = await response.text()
+    expect(body).toContain('Body cannot be empty')
 })
 
 // Test 4
