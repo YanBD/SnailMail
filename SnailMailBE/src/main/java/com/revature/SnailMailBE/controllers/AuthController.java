@@ -1,5 +1,6 @@
 package com.revature.SnailMailBE.controllers;
 
+import com.revature.SnailMailBE.model.PasswordDTO;
 import com.revature.SnailMailBE.model.User;
 import com.revature.SnailMailBE.services.AuthService;
 import jakarta.servlet.http.HttpSession;
@@ -23,8 +24,21 @@ public class AuthController {
         try {
             return ResponseEntity.ok().body(authService.logInUser(user, session));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw e;
         }
+
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
+        authService.addUser(user);
+        return ResponseEntity.ok().body(user);
+    }
+
+    @PatchMapping
+    public ResponseEntity<?> changePassword(@RequestBody PasswordDTO passwordDTO) {
+        authService.changePassword(passwordDTO);
+        return ResponseEntity.ok().body("Password Changed");
     }
 
     @ExceptionHandler (Exception.class)

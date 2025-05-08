@@ -33,7 +33,11 @@ public class MailController {
 
     @PostMapping
     public ResponseEntity<Mail> sendMail(@RequestBody Mail mail) {
-        return ResponseEntity.ok().body(mailService.sendMail(mail));
+        try {
+            return ResponseEntity.ok().body(mailService.sendMail(mail));
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @ExceptionHandler(Exception.class)

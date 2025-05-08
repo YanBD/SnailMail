@@ -1,5 +1,6 @@
 package com.revature.SnailMailBE.services;
 
+import com.revature.SnailMailBE.model.PasswordDTO;
 import com.revature.SnailMailBE.model.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
@@ -18,13 +19,44 @@ public class AuthService {
 
     public User logInUser(@RequestBody User newUser, HttpSession session) {
         //iterates through list of hardcoded users to compare username and password
+
         for (User user : users) {
-            if (Objects.equals(user.getUsername(), newUser.getUsername()) && Objects.equals(user.getPassword(), newUser.getPassword())) {
+            if (Objects.equals(user.getUsername(), newUser.getUsername())
+                    && Objects.equals(user.getPassword(), newUser.getPassword())) {
                 session.setAttribute("user", user);
+
+                System.out.println("Session ID:" + session.getId());
                 return user;
+
             }
         }
         //if no match is found, throw an exception
         throw new IllegalArgumentException("Invalid username or password");
+    }
+
+    public void addUser(User newUser) {
+        //adds a new user to the list
+        for (User user : users) {
+            if (Objects.equals(user.getUsername(), newUser.getUsername())){
+                throw new IllegalArgumentException("Username already exists");
+            }
+        }
+        users.add(newUser);
+    }
+
+    public void changePassword(PasswordDTO passwordDTO) {
+        //iterates through the list of Users to find user and old password combo
+        for (User user : users) {
+            if (Objects.equals(user.getUsername(), passwordDTO.getUsername())
+                    && (Objects.equals(user.getPassword(), passwordDTO.getOldPassword()))) {
+                //if found, set the new password
+                if (Objects.equals(passwordDTO.getOldPassword(), passwordDTO.getNewPassword())) {
+                    throw new IllegalArgumentException("New password cannot be the same as current password");
+                } else {
+                    user.setPassword(passwordDTO.getNewPassword());
+                    return;
+                }
+            }
+        } throw new IllegalArgumentException("Current password is incorrect");
     }
 }

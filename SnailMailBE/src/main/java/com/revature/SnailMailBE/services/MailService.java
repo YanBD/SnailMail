@@ -8,19 +8,21 @@ import java.util.Objects;
 
 @Service
 public class MailService {
-    public List<Mail> getInbox() {
-        List<Mail> inbox = List.of(
-                new Mail("snail@snailmail.com", "me@snailmail.com", "Hey", "I am a snail"),
-                new Mail("snail@snailmail.com", "me@snailmail.com", "Hey", "I have a shell"),
-                new Mail("slug@snailmail.com", "me@snailmail.com", "Hey", "I am a slug"),
-                new Mail("clam@snailmail.com", "me@snailmail.com", "Hey", "...")
+    private List<Mail> inbox = List.of(
+                new Mail("snail@snailmail.com", "yanbd@snailmail.com", "Hey", "I am a snail"),
+                new Mail("snail@snailmail.com", "yanbd@snailmail.com", "Hey", "I have a shell"),
+                new Mail("slug@snailmail.com", "yanbd@snailmail.com", "Hey", "I am a slug"),
+                new Mail("clam@snailmail.com", "yanbd@snailmail.com", "Hey", "...")
         );
-        if (inbox == null) {
+
+    public List<Mail> getInbox() {
+        if (inbox == null){
             return null;
         } else {
             return inbox;
         }
     }
+
 
     public Mail sendMail (Mail mail){
         if (mail.getRecipient() == null || mail.getRecipient().isBlank()) {
@@ -42,6 +44,7 @@ public class MailService {
             throw new IllegalArgumentException("Please enter a valid email address");
         }
 
+        System.out.println("new email sent");
         return mail;
     }
 }
