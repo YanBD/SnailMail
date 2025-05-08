@@ -5,6 +5,8 @@ import { Compose } from "./compose"
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom"
 import ErrorPage from "./ErrorPage"
 import { useState } from "react"
+import LogIn from "./LogIn"
+import Logout from "./Logout"
 
 
 const SideBar = () => {
@@ -15,6 +17,7 @@ const SideBar = () => {
       setShowCompose(!showCompose)
       setReplyMail(null)
     })
+
 
     //Functionality to send a reply email from the inbox
     // This function is passed as a prop to the Inbox component
@@ -48,17 +51,33 @@ const SideBar = () => {
                 <div className="position-fixed start-0 top-0 bg-t" style={{ width: '10%', borderRight: '1px solid #ccc', marginTop: '60px' }}>
                         <div><Link to="/" aria-label="home" className="btn border-bottom">Home</Link></div>
                         <div><Link to="/inbox" aria-label="inbox" className="btn border-bottom">Inbox</Link></div>
+
+                        
                         
                         <Routes>
                         <Route path="/" element={<Home/>}></Route>
                         <Route path="inbox" element={<Inbox sendReply={sendReply}/>}></Route>
+                        <Route path="auth/login" element={<LogIn/>}></Route>
+                        <Route path="auth/logout" element={<Logout/>}></Route>
                         <Route path="*" element={<ErrorPage/>}></Route>
                         </Routes>
 
+                    <div className="position-fixed end-0 top-0 bg-t" style={{ width: '10%', borderLeft: '1px solid #ccc', marginTop: '60px' }}>
+                        {sessionStorage.getItem("isLoggedIn") === "true" ?
+                            <div><Link  to="/auth/logout" aria-label="logout" className='btn border-bottom' >Log Out</Link></div> :
+                            <>
+                            <div><Link to="/auth/login" aria-label="login" className="btn border-bottom">Log In</Link></div>
+                            <div><Link to="/auth/signup" aria-label="signup" className="btn border-bottom">Sign Up</Link></div>
+                            </>}
+
+                    </div>
+
 
                 </div>
-                {showCompose ? <Compose data-testid="compose-component" onClose={toggleShowCompose} {...replyMail}/> 
+                <div>
+                    {showCompose ? <Compose data-testid="compose-component" onClose={toggleShowCompose} {...replyMail}/> 
                 : <button className='position-absolute bottom-0 end-0 m-3 btn btn-lg btn-outline-primary fs-1 ' onClick={toggleShowCompose}>📧</button>}
+                </div>
             </BrowserRouter>
         </div>
     )

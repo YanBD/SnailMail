@@ -13,8 +13,12 @@ export const Home = () => {
 
     return (
         <div className="d-flex">
-            <div className="card position-fixed start-0 top-0" style={{height:"92vh" ,width: "80vw", marginTop: "60px", marginLeft: "11vw"}}>
-                <div className="card-title"><h2 aria-label="welcomeHeading">Welcome to SnailMail</h2></div>
+            <div className="card position-fixed start-0 top-0" style={{height:"92vh" ,width: "78vw", marginTop: "60px", marginLeft: "11vw"}}>
+
+                {sessionStorage.getItem("isLoggedIn") === "true" ?
+                 <div className="card-title"><h2>Welcome {sessionStorage.getItem('username')} </h2></div>
+                 : <div className="card-title"><h2 aria-label="welcomeHeading">Welcome to SnailMail</h2></div> }
+                
                     <div className="card-body">
                         <p className="card-text">This is a simple email client built with React and Flask.</p>
                         <p className="card-text">You can send and receive emails, and manage your inbox.</p>

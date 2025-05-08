@@ -37,7 +37,7 @@ export const Inbox:React.FC<InboxProps> = ({sendReply}) => {
 
     return(
         <div className="d-flex">
-            <div className="card position-fixed start-0 top-0" style={{height:"95vh" ,width: "80vw", marginTop: "60px", marginLeft: "11vw"}}>
+            <div className="card position-fixed start-0 top-0" style={{height:"95vh" ,width: "78vw", marginTop: "60px", marginLeft: "11vw"}}>
                 <h3 className="font-monospace">Inbox</h3>
 
                 {inbox.length === 0 ? (<div className="alert alert-primary"> <p data-name="noMail" >No Mail! You're all caught up!</p></div>)
