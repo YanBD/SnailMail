@@ -3,6 +3,9 @@ import { useEffect } from "react";
 const ErrorPage = () => {
     useEffect(() => {
         document.title = "404 - Page Not Found";
+        setTimeout(() =>{
+            window.location.href = ("/")
+        }, 5000)
     })
 
     return (
@@ -12,10 +15,11 @@ const ErrorPage = () => {
                 <h1 className="font-bold text-red-600">404 - Page Not Found</h1>
                 <p className="mt-4 text-lg text-gray-700">
                     Sorry, the page you are looking for does not exist.
-                </p>
-                <a href="/" className="mt-6 text-blue-500 hover:underline">
-                    Go back to Home
-                </a>
+                </p> <br />
+
+                <p>You will be redirected back to the homepage in 5 seconds</p>
+                
+                
                 </div>
             </div>
         </div>

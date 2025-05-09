@@ -1,4 +1,5 @@
 import axios from "axios"
+import { useEffect } from "react"
 
 interface User {
     userID: string
@@ -12,6 +13,11 @@ interface User {
 
 
 const LogIn = () => {
+    
+    useEffect(() => {
+        document.title = ' User Authentication - Snail Mail'
+    })
+
     // This component is used to log in the user
     const setUserSession = (user :User) => {
         sessionStorage.setItem("isLoggedIn", "true")
@@ -33,7 +39,6 @@ const LogIn = () => {
             const response = await axios.post(httpUrl, data)
             console.log(response.data)
             setUserSession(response.data)
-            alert("Login successful")
             // Redirect to the home page
             window.location.href = "/"
         } catch (e) {

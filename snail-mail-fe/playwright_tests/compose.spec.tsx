@@ -1,8 +1,11 @@
 import {test, expect, request} from '@playwright/test';
-import { Test } from 'mocha';
 
 test.beforeEach(async ({page}) => {
     await page.goto('/')
+    await page.getByRole('link', {name: 'login'}).click()
+    await page.getByRole('textbox', {name: 'username'}).fill('yanbd')
+    await page.getByRole('textbox', {name: 'password'}).fill('password')
+    await page.getByRole('button', {name: 'Log In'}).click()
     await page.getByRole('button', {name: '📧'}).click()
     await expect (page.getByTestId('compose-component')).toBeVisible()
     page.removeAllListeners()

@@ -18,7 +18,7 @@ export const Home = () => {
 
                 {sessionStorage.getItem("isLoggedIn") === "true" ?
                 <>
-                 <div className="card-title"><h2>Welcome {sessionStorage.getItem('username')} </h2></div>
+                 <div className="card-title"><h2 aria-label="welcomeHeading">Welcome {sessionStorage.getItem('username')} </h2></div>
                  <div className="card-body">
                         <p className="card-text">Thank you for using SnailMail.</p>
                         <p className="card-text">Please select Inbox on the left of your screen to check Inbox.</p>
