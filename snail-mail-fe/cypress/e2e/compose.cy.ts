@@ -3,6 +3,10 @@
 describe("Compose Component Tests", () => {
     beforeEach(() => {
         cy.visit("http://localhost:5173/"); // Adjust the URL to your application's base URL
+        cy.get(".btn").contains("Log In").click()
+        cy.get("input[name ='username']").type("yanbd")
+        cy.get("input[name ='password']").type("password")
+        cy.get("button[name = 'submitLogin']").click()
     })
 
     //test Project 1------------------
@@ -149,7 +153,7 @@ describe("Compose Component Tests", () => {
     it("displays an error message if an email has the same sender and recipient", () => {
         cy.get("button").contains("📧").click()
         cy.get("[data-testid='compose-component']").should("exist")
-        cy.get("input[name='recipient']").type("me@snailmail.com")
+        cy.get("input[name='recipient']").type("yanbd@snailmail.com")
         cy.get("input[name='subject']").type("Hello")
         cy.get("textarea[name='body']").type("This is your Cypress test")
         cy.get("button").contains("Send").click()

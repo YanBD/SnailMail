@@ -19,6 +19,7 @@ interface Mail {
 }
 
 export const Compose:React.FC<Props> = ({onClose, sender, recipient, subject, body,  ...testID}) => {
+    
 
     const[mailToSend, setMailToSend] = useState<Mail>({
         sender: "",
@@ -26,10 +27,14 @@ export const Compose:React.FC<Props> = ({onClose, sender, recipient, subject, bo
         subject: "",
         body: ""
     })
+    const userEmail = sessionStorage.getItem("email")
+    if (typeof(userEmail) === "string") {
+        mailToSend.sender = userEmail
+    }
 
     useEffect(() => {
         setMailToSend({
-            sender: sender || "me@snailmail.com",
+            sender: sender || "",
             recipient: recipient || "",
             subject: subject || "",
             body: body || ""

@@ -1,5 +1,7 @@
+import axios from "axios";
 import { useEffect, useState } from "react"
 import { Table } from "react-bootstrap"
+import { useNavigate } from "react-router-dom";
 
 interface InboxProps {
     sendReply: (mail: any) => void;
@@ -16,18 +18,30 @@ export const Inbox:React.FC<InboxProps> = ({sendReply}) => {
     
 
     const [inbox, setInbox] = useState<Mail[]>([])
+    const navigate = useNavigate() 
+    const isUserLogged = sessionStorage.getItem("isLoggedIn")
 
     useEffect(() => {
         getInbox()
         document.title = "Inbox - Snail Mail"
+
+
+        if (!isUserLogged) {
+            navigate("/auth/login")
+            return
+        }
     }, [])
 
     const getInbox = async () => {
         const httpUrl = "http://localhost:8080/mail"
         try {
-            const response = await fetch(httpUrl)
-            const result = await response.json()
-            setInbox(result)
+            const response = await axios.get(httpUrl)
+            const result = await response.data
+
+            const loggedUserEmail = sessionStorage.getItem("email")
+
+            const filteredResult = result.filter((mail: Mail) => mail.recipient === loggedUserEmail)
+            setInbox(filteredResult)
         }
         catch {
             alert("Please try again later")
@@ -40,8 +54,8 @@ export const Inbox:React.FC<InboxProps> = ({sendReply}) => {
             <div className="card position-fixed start-0 top-0" style={{height:"95vh" ,width: "78vw", marginTop: "60px", marginLeft: "11vw"}}>
                 <h3 className="font-monospace">Inbox</h3>
 
-                {inbox.length === 0 ? (<div className="alert alert-primary"> <p data-name="noMail" >No Mail! You're all caught up!</p></div>)
-                :(
+                {inbox.length === 0 && (isUserLogged === "true") ? (<div className="alert alert-primary"> <p data-name="noMail" >No Mail! You're all caught up!</p></div>)
+                :( 
                     <Table hover bordered data-name="inboxTable">
                         <thead>
                             <tr>

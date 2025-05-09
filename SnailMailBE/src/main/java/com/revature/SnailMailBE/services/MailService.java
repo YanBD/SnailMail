@@ -12,7 +12,8 @@ public class MailService {
                 new Mail("snail@snailmail.com", "yanbd@snailmail.com", "Hey", "I am a snail"),
                 new Mail("snail@snailmail.com", "yanbd@snailmail.com", "Hey", "I have a shell"),
                 new Mail("slug@snailmail.com", "yanbd@snailmail.com", "Hey", "I am a slug"),
-                new Mail("clam@snailmail.com", "yanbd@snailmail.com", "Hey", "...")
+                new Mail("clam@snailmail.com", "yanbd@snailmail.com", "Hey", "..."),
+                new Mail("yanbd@snailmail.com", "snail@snailmail.com", "You are a snail", "You are slimy")
         );
 
     public List<Mail> getInbox() {

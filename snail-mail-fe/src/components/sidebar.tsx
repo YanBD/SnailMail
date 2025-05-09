@@ -4,19 +4,25 @@ import { Home } from "./home"
 import { Compose } from "./compose"
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom"
 import ErrorPage from "./ErrorPage"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import LogIn from "./LogIn"
 import Logout from "./Logout"
 
 
 const SideBar = () => {
         const [showCompose, setShowCompose] = useState<boolean>(false)
-        const [replyMail, setReplyMail] = useState<any | null>(null) 
+        const [replyMail, setReplyMail] = useState<any | null>(null)
+        const [isUserLogged, setIsUserLogged] = useState<boolean>(false)
 
     const toggleShowCompose = (() => {
       setShowCompose(!showCompose)
       setReplyMail(null)
     })
+
+    useEffect(() => {
+        const logged = sessionStorage.getItem("isLoggedIn") === "true"
+        setIsUserLogged(logged)
+    }, [])
 
 
     //Functionality to send a reply email from the inbox
@@ -24,7 +30,7 @@ const SideBar = () => {
     // and is called when the user clicks the reply button on an email
     const sendReply = (mail: any) => { 
         setReplyMail ({ 
-            sender: mail.recipient,
+            sender: sessionStorage.getItem("email"),
             recipient: mail.sender,
             subject: `Re: ${mail.subject}`,
             body: `\n\n--- Original Message ---\n${mail.body}`,
@@ -63,8 +69,8 @@ const SideBar = () => {
                         </Routes>
 
                     <div className="position-fixed end-0 top-0 bg-t" style={{ width: '10%', borderLeft: '1px solid #ccc', marginTop: '60px' }}>
-                        {sessionStorage.getItem("isLoggedIn") === "true" ?
-                            <div><Link  to="/auth/logout" aria-label="logout" className='btn border-bottom' >Log Out</Link></div> :
+                        {isUserLogged?
+                            <div><Link  to="/auth/logout" aria-label="logout" className='btn border-bottom' onClick={() => setIsUserLogged(false)} >Log Out</Link></div> :
                             <>
                             <div><Link to="/auth/login" aria-label="login" className="btn border-bottom">Log In</Link></div>
                             <div><Link to="/auth/signup" aria-label="signup" className="btn border-bottom">Sign Up</Link></div>
@@ -75,8 +81,9 @@ const SideBar = () => {
 
                 </div>
                 <div>
+                    {!isUserLogged ? <div></div> : <>
                     {showCompose ? <Compose data-testid="compose-component" onClose={toggleShowCompose} {...replyMail}/> 
-                : <button className='position-absolute bottom-0 end-0 m-3 btn btn-lg btn-outline-primary fs-1 ' onClick={toggleShowCompose}>📧</button>}
+                : <button className='position-absolute bottom-0 end-0 m-3 btn btn-lg btn-outline-primary fs-1 ' onClick={toggleShowCompose}>📧</button>})</>}
                 </div>
             </BrowserRouter>
         </div>

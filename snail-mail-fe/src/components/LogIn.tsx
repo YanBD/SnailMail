@@ -64,7 +64,7 @@ const LogIn = () => {
                 <input type="password" className="form-control" id="password" name="password" required />
             </div>
         </div>
-        <button type="submit">Log In</button>
+        <button name="submitLogin" type="submit">Log In</button>
       </form>
     </div>
     </div>
