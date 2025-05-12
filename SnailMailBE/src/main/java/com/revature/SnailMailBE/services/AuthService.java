@@ -6,16 +6,18 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 public class AuthService {
-    public List<User> users = List.of(
+    public List<User> users = new ArrayList<User> (Arrays.asList(
             new User("0", "yanbd", "password", "bryan", "yancey","admin"),
             new User("1", "snail", "password", "Snail", "hard","user"),
             new User("2", "mail", "password", "mail", "coded","user")
-    );
+    ));
 
     public User logInUser(@RequestBody User newUser, HttpSession session) {
         //iterates through list of hardcoded users to compare username and password
@@ -24,8 +26,6 @@ public class AuthService {
             if (Objects.equals(user.getUsername(), newUser.getUsername())
                     && Objects.equals(user.getPassword(), newUser.getPassword())) {
                 session.setAttribute("user", user);
-
-                System.out.println("Session ID:" + session.getId());
                 return user;
 
             }
@@ -36,12 +36,18 @@ public class AuthService {
 
     public void addUser(User newUser) {
         //adds a new user to the list
+        newUser.setUserID(String.valueOf(users.size()));
+        newUser.setRole("user");
+        newUser.setEmail(newUser.getUsername());
+
         for (User user : users) {
             if (Objects.equals(user.getUsername(), newUser.getUsername())){
                 throw new IllegalArgumentException("Username already exists");
             }
+
         }
         users.add(newUser);
+
     }
 
     public void changePassword(PasswordDTO passwordDTO) {

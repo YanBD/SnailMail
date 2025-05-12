@@ -51,4 +51,11 @@ test('User can rout to the Inbox page and see their inbox', async ({browser}) =>
     
 })
 
-//tes
+//test 5. checks if guest tries to access Inbox they are routed to login page
+test("Guest can not access Inbox and are redirected to login page", async ({browser}) => {
+    const browserContext = await browser.newContext()
+    const page = await browserContext.newPage()
+    await page.goto('http://LocalHost:5173/')
+    await page.getByRole('link', {name: 'inbox'}).click()
+    await expect(page.getByTitle('User Authentication - Snail Mail')).toBeTruthy()
+})

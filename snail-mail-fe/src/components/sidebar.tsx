@@ -7,6 +7,7 @@ import ErrorPage from "./ErrorPage"
 import { useState, useEffect } from "react"
 import LogIn from "./LogIn"
 import Logout from "./Logout"
+import Register from "./register"
 
 
 const SideBar = () => {
@@ -65,6 +66,7 @@ const SideBar = () => {
                         <Route path="inbox" element={<Inbox sendReply={sendReply}/>}></Route>
                         <Route path="auth/login" element={<LogIn/>}></Route>
                         <Route path="auth/logout" element={<Logout/>}></Route>
+                        <Route path="auth/register" element={<Register/>}></Route>
                         <Route path="*" element={<ErrorPage/>}></Route>
                         </Routes>
 
@@ -73,7 +75,7 @@ const SideBar = () => {
                             <div><Link  to="/auth/logout" aria-label="logout" className='btn border-bottom' onClick={() => setIsUserLogged(false)} >Log Out</Link></div> :
                             <>
                             <div><Link to="/auth/login" aria-label="login" className="btn border-bottom">Log In</Link></div>
-                            <div><Link to="/auth/signup" aria-label="signup" className="btn border-bottom">Sign Up</Link></div>
+                            <div><Link to="/auth/register" aria-label="register" className="btn border-bottom">Register</Link></div>
                             </>}
 
                     </div>

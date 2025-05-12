@@ -21,11 +21,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> logInUser(@RequestBody User user, HttpSession session){
-        try {
             return ResponseEntity.ok().body(authService.logInUser(user, session));
-        } catch (Exception e) {
-            throw e;
-        }
 
     }
 

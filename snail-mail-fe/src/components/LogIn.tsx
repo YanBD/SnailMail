@@ -15,7 +15,7 @@ interface User {
 const LogIn = () => {
     
     useEffect(() => {
-        document.title = ' User Authentication - Snail Mail'
+        document.title = 'User Authentication - Snail Mail'
     })
 
     // This component is used to log in the user
@@ -54,24 +54,24 @@ const LogIn = () => {
 
   return (
     <div className="d-flex">
-            <div className="card position-fixed start-0 top-0" style={{height:"95vh" ,width: "80vw", marginTop: "60px", marginLeft: "11vw"}}>
-      <form onSubmit={login}>
-        <h3 className="font-monospace">Log In</h3>
-        <div className="row justify-content-md-center mb-3">
-            <label htmlFor="username" className="col-sm-2 ce col-form-label">Username:</label>
-            <div className="col-sm-4">
-                <input type="text" className="form-control" id="username" name="username" required />
-            </div>
+        <div className="card position-fixed start-0 top-0" style={{height:"95vh" ,width: "78vw", marginTop: "60px", marginLeft: "11vw"}}>
+            <form onSubmit={login}>
+                <h3 className="font-monospace">Log In</h3>
+                <div className="row justify-content-md-center mb-3">
+                    <label htmlFor="username" className="col-sm-2 ce col-form-label">Username:</label>
+                    <div className="col-sm-4">
+                        <input type="text" className="form-control" id="username" name="username" required />
+                    </div>
+                </div>
+                <div className="row justify-content-md-center mb-3">
+                    <label htmlFor="password" className="col-sm-2 col-form-label">Password:</label>
+                    <div className="col-sm-4">
+                        <input type="password" className="form-control" id="password" name="password" required />
+                    </div>
+                </div>
+                <button name="submitLogin" type="submit">Log In</button>
+            </form>
         </div>
-        <div className="row justify-content-md-center mb-3">
-            <label htmlFor="password" className="col-sm-2 col-form-label">Password:</label>
-            <div className="col-sm-4">
-                <input type="password" className="form-control" id="password" name="password" required />
-            </div>
-        </div>
-        <button name="submitLogin" type="submit">Log In</button>
-      </form>
-    </div>
     </div>
   );
 }

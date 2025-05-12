@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 import { Table } from "react-bootstrap"
+import { useNavigate } from "react-router-dom";
 
 interface InboxProps {
     sendReply: (mail: any) => void;
@@ -14,7 +15,7 @@ interface Mail {
 }
 
 export const Inbox:React.FC<InboxProps> = ({sendReply}) => {
-    
+    const navigate = useNavigate()    
 
     const [inbox, setInbox] = useState<Mail[]>([]) 
     const isUserLogged = sessionStorage.getItem("isLoggedIn")
@@ -25,7 +26,7 @@ export const Inbox:React.FC<InboxProps> = ({sendReply}) => {
 
 
         if (!isUserLogged) {
-            window.location.href = ("/auth/login")
+            navigate("/auth/login")
             return
         }
     }, [])
