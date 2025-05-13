@@ -1,11 +1,10 @@
 package com.revature.SnailMailBE.controllers;
 
 import com.revature.SnailMailBE.model.User;
+import com.revature.SnailMailBE.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,14 +13,36 @@ import java.util.List;
 @RequestMapping("/user")
 @CrossOrigin
 public class UserController {
-    @GetMapping
-    public ResponseEntity<List<User>> getUserList (){
-            List<User> userList = List.of(
-                    new User("0", "yanbd", "password", "bryan", "yancey","admin"),
-                    new User("1", "snail", "password", "Snail", "hard","user"),
-                    new User("2", "mail", "password", "mail", "coded","user")
-            );
-    return ResponseEntity.ok().body(userList);
+    private UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
+
+    @GetMapping
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = userService.getAllUsers();
+        try {
+            return ResponseEntity.ok().body(users);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @PatchMapping("/profile")
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        try {
+            userService.changeUserInfo(user);
+            return ResponseEntity.ok().body(user);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Exception> handleException(Exception e) {
+        return ResponseEntity.badRequest().body(e);
+    }
 }

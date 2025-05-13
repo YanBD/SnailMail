@@ -11,6 +11,17 @@ interface User {
     role: string
 }
 
+export const setUserSession = (user: User) => {
+    sessionStorage.setItem("isLoggedIn", "true");
+    sessionStorage.setItem("userID", user.userID);
+    sessionStorage.setItem("username", user.username);
+    sessionStorage.setItem("email", user.email);
+    sessionStorage.setItem("firstName", user.firstName);
+    sessionStorage.setItem("lastName", user.lastName);
+    sessionStorage.setItem("role", user.role);
+    sessionStorage.setItem("user", JSON.stringify(user));
+};
+
 
 const LogIn = () => {
     
@@ -19,16 +30,6 @@ const LogIn = () => {
     })
 
     // This component is used to log in the user
-    const setUserSession = (user :User) => {
-        sessionStorage.setItem("isLoggedIn", "true")
-        sessionStorage.setItem("userID", user.userID)
-        sessionStorage.setItem("username", user.username)
-        sessionStorage.setItem("email", user.email)
-        sessionStorage.setItem("firstName", user.firstName)
-        sessionStorage.setItem("lastName", user.lastName)
-        sessionStorage.setItem("role", user.role)
-        sessionStorage.setItem("user", JSON.stringify(user))
-    }
 
     const login = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -40,7 +41,7 @@ const LogIn = () => {
             console.log(response.data)
             setUserSession(response.data)
             // Redirect to the home page
-            window.location.href = "/"
+            //window.location.href = "/"
         } catch (e) {
             if (axios.isAxiosError(e)) {
                 alert(e.response?.data.message)

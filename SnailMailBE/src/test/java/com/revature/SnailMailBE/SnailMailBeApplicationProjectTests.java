@@ -96,7 +96,6 @@ public class SnailMailBeApplicationProjectTests {
                 "Test",
                 "This test originated from rest assured"
         );
-        //TODO: figure this crap out
         when(mockMailService.sendMail(any(Mail.class))).thenReturn(mail);
 
         mockMvc.perform(post("/mail").content(objectMapper.writeValueAsString(mail))

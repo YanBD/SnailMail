@@ -8,6 +8,7 @@ import { useState, useEffect } from "react"
 import LogIn from "./LogIn"
 import Logout from "./Logout"
 import Register from "./register"
+import Profile from "./profile"
 
 
 const SideBar = () => {
@@ -57,16 +58,23 @@ const SideBar = () => {
             <BrowserRouter>
                 <div className="position-fixed start-0 top-0 bg-t" style={{ width: '10%', borderRight: '1px solid #ccc', marginTop: '60px' }}>
                         <div><Link to="/" aria-label="home" className="btn border-bottom">Home</Link></div>
+
+                        {isUserLogged?                        
+                        <>
                         <div><Link to="/inbox" aria-label="inbox" className="btn border-bottom">Inbox</Link></div>
+                        <div><Link to="/user/profile" aria-label="userProfile" className="btn border-bottom">User Profile</Link></div>
+                        </> :
+                        <br />}
 
                         
-                        
+                      
                         <Routes>
                         <Route path="/" element={<Home/>}></Route>
                         <Route path="inbox" element={<Inbox sendReply={sendReply}/>}></Route>
                         <Route path="auth/login" element={<LogIn/>}></Route>
                         <Route path="auth/logout" element={<Logout/>}></Route>
                         <Route path="auth/register" element={<Register/>}></Route>
+                        <Route path="/user/profile" element={<Profile/>}></Route>
                         <Route path="*" element={<ErrorPage/>}></Route>
                         </Routes>
 

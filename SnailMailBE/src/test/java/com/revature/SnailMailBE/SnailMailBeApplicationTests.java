@@ -190,7 +190,7 @@ class SnailMailBeApplicationTests {
 				.then().extract().response();
 		response.then()
 				.statusCode(400)
-				.body("message", equalTo("Please enter a valid email address"));
+				.body("message", equalTo("Please enter a valid email address"));  
 	}
 
 

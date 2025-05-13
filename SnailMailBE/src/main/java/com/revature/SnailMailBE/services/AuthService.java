@@ -14,8 +14,8 @@ import java.util.Objects;
 @Service
 public class AuthService {
     public List<User> users = new ArrayList<User> (Arrays.asList(
-            new User("0", "yanbd", "password", "bryan", "yancey","admin"),
-            new User("1", "snail", "password", "Snail", "hard","user"),
+            new User("0", "yanbd", "passwo", "bryan", "yancey","admin"),
+            new User("1", "snail", "passwor", "Snail", "hard","user"),
             new User("2", "mail", "password", "mail", "coded","user")
     ));
 
@@ -64,5 +64,9 @@ public class AuthService {
                 }
             }
         } throw new IllegalArgumentException("Current password is incorrect");
+    }
+
+    public List<User> getUsers() {
+        return users;
     }
 }
