@@ -1,9 +1,14 @@
 package com.revature.SnailMailBE.model;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
 public class User {
 
     //fields
-    private String userID;
+    @MongoId
+    private ObjectId userID;
+
     private String username;
     private String email;
     private String password;
@@ -11,23 +16,34 @@ public class User {
     private String lastName;
     private String role;
 
-    public User() {}
+    public User() {
+        this.role = "user";
+    }
 
-    public User(String userID, String username, String password, String firstName, String lastName, String role) {
+    public User(ObjectId userID, String username, String password, String firstName, String lastName, String role) {
         this.userID = userID;
         this.username = username;
         this.email  = username + "@snailmail.com";
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = role;
+        this.role = role != null ? role : "user";
     }
 
-    public String getUserID() {
+    public User( String username, String password, String firstName, String lastName, String role) {
+        this.username = username;
+        this.email  = username + "@snailmail.com";
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role != null ? role : "user";
+    }
+
+    public ObjectId getUserID() {
         return userID;
     }
 
-    public void setUserID(String userID) {
+    public void setUserID(ObjectId userID) {
         this.userID = userID;
     }
 
@@ -44,6 +60,7 @@ public class User {
     }
 
     public void setEmail(String username) {
+        this.username = username;
         this.email = username + "@snailmail.com";
     }
 

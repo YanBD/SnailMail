@@ -1,6 +1,9 @@
 package com.revature.SnailMailBE.services;
 
+import com.revature.SnailMailBE.daos.UserDAO;
 import com.revature.SnailMailBE.model.User;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,39 +13,58 @@ import java.util.Objects;
 public class UserService {
     // Using Authservice list of users to prevent redundancy
     private AuthService authService;
-
     public UserService(AuthService authService) {
         this.authService = authService;
     }
 
-    public List<User> getAllUsers() {
-        return authService.getUsers();
+    private UserDAO userDAO;
+
+    @Autowired
+    public UserService(UserDAO userDAO) {
+        this.userDAO = userDAO;
+        users = userDAO.findAll();
     }
 
+    private List<User> users;
+
     public User changeUserInfo(User updateUser){
-        for (User user: getAllUsers()) {
-            if (!Objects.equals(user.getUserID(), updateUser.getUserID())
-                    && Objects.equals(user.getUsername(), updateUser.getUsername())) {
-                throw new IllegalArgumentException("Username already exist");
-            }
-            if (Objects.equals(user.getUserID(), updateUser.getUserID())) {
-                if (!Objects.equals(user.getPassword(), updateUser.getPassword())) {
-                    throw new IllegalArgumentException("User Password does not match");
+        //find user by username
+        System.out.println(updateUser.getUserID());
+        ObjectId id = new ObjectId();
+        id= updateUser.getUserID();
+        User user = userDAO.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not Found"));
 
-                }
-                user.setUsername(updateUser.getUsername());
-                user.setEmail(updateUser.getUsername());
-                user.setFirstName(updateUser.getFirstName());
-                user.setLastName(updateUser.getLastName());
-                user.setRole(updateUser.getRole());
-
-                System.out.println(updateUser.getEmail());
-                System.out.println(updateUser.getPassword());
-                return user;
-            }
+        // verify unique username except User being edited
+        if (userDAO.findByUsername(updateUser.getUsername()).isPresent()
+                && !Objects.equals(user.getUserID(), updateUser.getUserID())) {
+            throw new IllegalArgumentException("Username already exist");
         }
 
-        throw new IllegalArgumentException("User ID does not exist");
+        //verify password of user
+        if (!Objects.equals(user.getPassword(), updateUser.getPassword())){
+            throw new IllegalArgumentException("User Password does not match");
 
+        }
+
+        //update user information
+        user.setUsername(updateUser.getUsername());
+        user.setEmail(updateUser.getUsername());
+        user.setFirstName(updateUser.getFirstName());
+        user.setLastName(updateUser.getLastName());
+        user.setRole(updateUser.getRole());
+
+        //return user
+        return userDAO.save(user);
+
+
+
+    }
+
+    public List<User> getAllUsers() {
+        if (users.isEmpty()){
+            return null;
+        }
+        return users;
     }
 }

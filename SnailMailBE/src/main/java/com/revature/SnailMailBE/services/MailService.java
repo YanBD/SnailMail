@@ -1,6 +1,8 @@
 package com.revature.SnailMailBE.services;
 
+import com.revature.SnailMailBE.daos.MailDAO;
 import com.revature.SnailMailBE.model.Mail;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,16 +10,27 @@ import java.util.Objects;
 
 @Service
 public class MailService {
-    private List<Mail> inbox = List.of(
-                new Mail("snail@snailmail.com", "yanbd@snailmail.com", "Hey", "I am a snail"),
-                new Mail("snail@snailmail.com", "yanbd@snailmail.com", "Hey", "I have a shell"),
-                new Mail("slug@snailmail.com", "yanbd@snailmail.com", "Hey", "I am a slug"),
-                new Mail("clam@snailmail.com", "yanbd@snailmail.com", "Hey", "..."),
-                new Mail("yanbd@snailmail.com", "snail@snailmail.com", "You are a snail", "You are slimy")
-        );
+//    private List<Mail> inbox = List.of(
+//                new Mail("snail@snailmail.com", "yanbd@snailmail.com", "Hey", "I am a snail"),
+//                new Mail("snail@snailmail.com", "yanbd@snailmail.com", "Hey", "I have a shell"),
+//                new Mail("slug@snailmail.com", "yanbd@snailmail.com", "Hey", "I am a slug"),
+//                new Mail("clam@snailmail.com", "yanbd@snailmail.com", "Hey", "..."),
+//                new Mail("yanbd@snailmail.com", "snail@snailmail.com", "You are a snail", "You are slimy")
+//        );
+
+    private MailDAO mailDAO;
+
+    @Autowired
+    public MailService(MailDAO mailDAO) {
+        this.mailDAO = mailDAO;
+        inbox = mailDAO.findAll();
+    }
+
+    private List<Mail> inbox;
 
     public List<Mail> getInbox() {
-        if (inbox == null){
+
+        if (inbox.isEmpty()){
             return null;
         } else {
             return inbox;
@@ -46,6 +59,6 @@ public class MailService {
         }
 
         System.out.println("new email sent");
-        return mail;
+        return mailDAO.save(mail);
     }
 }

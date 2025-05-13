@@ -41,7 +41,7 @@ const LogIn = () => {
             console.log(response.data)
             setUserSession(response.data)
             // Redirect to the home page
-            //window.location.href = "/"
+            window.location.href = "/"
         } catch (e) {
             if (axios.isAxiosError(e)) {
                 alert(e.response?.data.message)

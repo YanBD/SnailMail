@@ -1,72 +1,79 @@
 package com.revature.SnailMailBE.services;
 
+import com.revature.SnailMailBE.daos.UserDAO;
 import com.revature.SnailMailBE.model.PasswordDTO;
 import com.revature.SnailMailBE.model.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+//import java.util.ArrayList;
+//import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 public class AuthService {
-    public List<User> users = new ArrayList<User> (Arrays.asList(
-            new User("0", "yanbd", "passwo", "bryan", "yancey","admin"),
-            new User("1", "snail", "passwor", "Snail", "hard","user"),
-            new User("2", "mail", "password", "mail", "coded","user")
-    ));
+//   public List<User> users = new ArrayList<User> (Arrays.asList(
+//            new User("yanbd", "passwo", "bryan", "yancey","admin"),
+//           new User("snail", "passwor", "Snail", "hard","user"),
+//            new User("mail", "password", "mail", "coded","user")
+//    ));
+
+    private UserDAO userDAO;
+
+    public AuthService(UserDAO userDAO) {
+        this.userDAO = userDAO;
+        users = userDAO.findAll();
+
+    }
+
+    private List<User> users;
 
     public User logInUser(@RequestBody User newUser, HttpSession session) {
-        //iterates through list of hardcoded users to compare username and password
+        //finds username from database
+        User user = userDAO.findByUsername(newUser.getUsername())
+                .orElseThrow(() ->new IllegalArgumentException("Invalid Username"));
 
-        for (User user : users) {
-            if (Objects.equals(user.getUsername(), newUser.getUsername())
-                    && Objects.equals(user.getPassword(), newUser.getPassword())) {
-                session.setAttribute("user", user);
-                return user;
-
-            }
+        //verify password
+        if (!Objects.equals(user.getPassword(), newUser.getPassword())) {
+            throw new IllegalArgumentException("Invalid password");
         }
-        //if no match is found, throw an exception
-        throw new IllegalArgumentException("Invalid username or password");
+
+        return user;
     }
 
     public void addUser(User newUser) {
-        //adds a new user to the list
-        newUser.setUserID(String.valueOf(users.size()));
-        newUser.setRole("user");
-        newUser.setEmail(newUser.getUsername());
-
-        for (User user : users) {
-            if (Objects.equals(user.getUsername(), newUser.getUsername())){
-                throw new IllegalArgumentException("Username already exists");
-            }
-
+        //sets user role and email
+        if (newUser.getRole() == null || newUser.getRole().isEmpty()) {
+            newUser.setRole("user");
         }
-        users.add(newUser);
+        if (newUser.getEmail() == null || newUser.getEmail().isEmpty()) {
+            newUser.setEmail(newUser.getUsername());
+        }
+
+        //iterates over database to ensure username is unique
+       if (userDAO.findByUsername(newUser.getUsername()).isPresent()) {
+           throw new IllegalArgumentException("Username already Exists");
+       }
+
+
+        userDAO.save(newUser);
 
     }
 
     public void changePassword(PasswordDTO passwordDTO) {
-        //iterates through the list of Users to find user and old password combo
-        for (User user : users) {
-            if (Objects.equals(user.getUsername(), passwordDTO.getUsername())
-                    && (Objects.equals(user.getPassword(), passwordDTO.getOldPassword()))) {
-                //if found, set the new password
-                if (Objects.equals(passwordDTO.getOldPassword(), passwordDTO.getNewPassword())) {
-                    throw new IllegalArgumentException("New password cannot be the same as current password");
-                } else {
-                    user.setPassword(passwordDTO.getNewPassword());
-                    return;
-                }
-            }
-        } throw new IllegalArgumentException("Current password is incorrect");
+        //find the user by username
+        User user = userDAO.findByUsername(passwordDTO.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("User not Found"));
+
+        //Verify current password
+        if (!Objects.equals(user.getPassword(), passwordDTO.getOldPassword())) {
+            throw new IllegalArgumentException("Current password is incorrect");
+        }
+
+        user.setPassword(passwordDTO.getNewPassword());
+        userDAO.save(user);
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
 }
