@@ -17,6 +17,7 @@ test.beforeEach(async ({page}) => {
 //Test if user can see Inbox table from the inbox component
 //Test if the inbox table has the correct headers and is visible
 test('User can see the inbox table', async ({page}) => {
+    page.reload()
     await expect (page.getByRole('heading', {'name': 'Inbox'})).toBeVisible()
     await expect (page.getByRole('cell', {'name': 'Subject'})).toBeVisible()
     await expect (page.getByRole('cell', {'name': 'Sender'})).toBeVisible()

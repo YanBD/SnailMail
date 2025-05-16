@@ -9,16 +9,22 @@ import LogIn from "./LogIn"
 import Logout from "./Logout"
 import Register from "./register"
 import Profile from "./profile"
+import PasswordChange from "./passwordChange"
 
 
 const SideBar = () => {
         const [showCompose, setShowCompose] = useState<boolean>(false)
         const [replyMail, setReplyMail] = useState<any | null>(null)
         const [isUserLogged, setIsUserLogged] = useState<boolean>(false)
+        const [showPasswordChage, setShowPasswordChange] = useState<boolean>(false)
 
     const toggleShowCompose = (() => {
       setShowCompose(!showCompose)
       setReplyMail(null)
+    })
+
+    const toggleShowChangePassword = (() => {
+        setShowPasswordChange(!showPasswordChage)
     })
 
     useEffect(() => {
@@ -56,12 +62,12 @@ const SideBar = () => {
     return (
         <div className="d-flex">
             <BrowserRouter>
-                <div className="position-fixed start-0 top-0 bg-t" style={{ width: '10%', borderRight: '1px solid #ccc', marginTop: '60px' }}>
+                <div className="position-fixed start-0 top-0 bg-t" style={{ width: '10vw', borderRight: '1px solid #ccc', marginTop: "60px" }}>
                         <div><Link to="/" aria-label="home" className="btn border-bottom">Home</Link></div>
+                        <div><Link to="/inbox" aria-label="inbox" className="btn border-bottom">Inbox</Link></div>
 
                         {isUserLogged?                        
-                        <>
-                        <div><Link to="/inbox" aria-label="inbox" className="btn border-bottom">Inbox</Link></div>
+                        <>                        
                         <div><Link to="/user/profile" aria-label="userProfile" className="btn border-bottom">User Profile</Link></div>
                         </> :
                         <br />}
@@ -91,9 +97,13 @@ const SideBar = () => {
 
                 </div>
                 <div>
-                    {!isUserLogged ? <div></div> : <>
+                    {!isUserLogged ? <br /> : <>
                     {showCompose ? <Compose data-testid="compose-component" onClose={toggleShowCompose} {...replyMail}/> 
-                : <button className='position-absolute bottom-0 end-0 m-3 btn btn-lg btn-outline-primary fs-1 ' onClick={toggleShowCompose}>📧</button>})</>}
+                : <button className='position-absolute bottom-0 end-0 m-3 btn btn-lg btn-outline-primary fs-1 ' onClick={toggleShowCompose}>📧</button>})
+                
+                {showPasswordChage ? <PasswordChange onClose={toggleShowChangePassword}/> :
+                        <button className='position-fixed bottom-0 start-0 m-3 btn border-bottom ' onClick={toggleShowChangePassword}>Change Password</button>}
+                </>}
                 </div>
             </BrowserRouter>
         </div>

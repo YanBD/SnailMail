@@ -18,7 +18,7 @@ test('Guest can route to the home page but not see compose button', async ({brow
     await expect(page.getByRole('heading', {name: 'welcomeHeading'})).toBeVisible()
     await expect(page.getByRole('button', {name: '📧'})).not.toBeVisible()
     await expect(page.getByRole('link', {name: 'login'})).toBeVisible()
-    await expect(page.getByRole('link', {name: 'signup'})).toBeVisible()
+    await expect(page.getByRole('link', {name: 'register'})).toBeVisible()
 })
 
 //Test 3. Check if a user can route to home page and see compose button

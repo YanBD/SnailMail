@@ -20,10 +20,10 @@ public class User {
         this.role = "user";
     }
 
-    public User(ObjectId userID, String username, String password, String firstName, String lastName, String role) {
+    public User(ObjectId userID, String username,String email, String password, String firstName, String lastName, String role) {
         this.userID = userID;
         this.username = username;
-        this.email  = username + "@snailmail.com";
+        this.email  = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,12 +39,12 @@ public class User {
         this.role = role != null ? role : "user";
     }
 
-    public ObjectId getUserID() {
-        return userID;
+    public String getUserID() {
+        return userID != null ? userID.toHexString() : null;
     }
 
-    public void setUserID(ObjectId userID) {
-        this.userID = userID;
+    public void setUserID(String userID) {
+        this.userID = userID != null ? new ObjectId(userID) : null;
     }
 
     public String getUsername() {
@@ -59,9 +59,8 @@ public class User {
         return email;
     }
 
-    public void setEmail(String username) {
-        this.username = username;
-        this.email = username + "@snailmail.com";
+    public void setEmail(String email) {
+        this.email = email != null ? email : username + "@snailmail.com";
     }
 
     public String getPassword() {

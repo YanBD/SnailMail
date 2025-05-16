@@ -39,7 +39,8 @@ public class AuthService {
         if (!Objects.equals(user.getPassword(), newUser.getPassword())) {
             throw new IllegalArgumentException("Invalid password");
         }
-
+        System.out.println(user.getUserID());
+        session.setAttribute("userId", user.getUserID());
         return user;
     }
 
@@ -70,6 +71,10 @@ public class AuthService {
         //Verify current password
         if (!Objects.equals(user.getPassword(), passwordDTO.getOldPassword())) {
             throw new IllegalArgumentException("Current password is incorrect");
+        }
+
+        if (Objects.equals(user.getPassword(), passwordDTO.getNewPassword())) {
+            throw new IllegalArgumentException("Can not use current password");
         }
 
         user.setPassword(passwordDTO.getNewPassword());

@@ -2,6 +2,7 @@ package com.revature.SnailMailBE.controllers;
 
 import com.revature.SnailMailBE.model.User;
 import com.revature.SnailMailBE.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

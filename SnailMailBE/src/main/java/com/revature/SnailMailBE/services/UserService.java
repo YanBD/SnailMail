@@ -2,6 +2,7 @@ package com.revature.SnailMailBE.services;
 
 import com.revature.SnailMailBE.daos.UserDAO;
 import com.revature.SnailMailBE.model.User;
+import jakarta.servlet.http.HttpSession;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,11 +29,9 @@ public class UserService {
     private List<User> users;
 
     public User changeUserInfo(User updateUser){
-        //find user by username
+        //find user by userid
         System.out.println(updateUser.getUserID());
-        ObjectId id = new ObjectId();
-        id= updateUser.getUserID();
-        User user = userDAO.findById(id)
+        User user = userDAO.findByUserID(updateUser.getUserID())
                 .orElseThrow(() -> new IllegalArgumentException("User not Found"));
 
         // verify unique username except User being edited
@@ -49,7 +48,6 @@ public class UserService {
 
         //update user information
         user.setUsername(updateUser.getUsername());
-        user.setEmail(updateUser.getUsername());
         user.setFirstName(updateUser.getFirstName());
         user.setLastName(updateUser.getLastName());
         user.setRole(updateUser.getRole());
